@@ -1,0 +1,2 @@
+10:21:50.105 [main] INFO  demoqa.core.TestBase -- Test is started: [alertWithSelectedTextPositiveTes]
+10:22:01.050 [main] INFO  demoqa.core.TestBase -- Test is PASSED: [alertWithSelectedTextPositiveTes]

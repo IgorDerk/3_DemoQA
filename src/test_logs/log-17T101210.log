@@ -1,0 +1,2 @@
+10:12:11.506 [main] INFO  demoqa.core.TestBase -- Test is started: [loginPositiveTest]
+10:12:32.825 [main] ERROR demoqa.core.TestBase -- Test is FAILED: [loginPositiveTest], Screenshot: [C:\AIT_Programming\AIT_QA\3_DemoQA\src\test_screenshots\screen-1739783552788.png]
