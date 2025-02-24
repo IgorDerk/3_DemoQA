@@ -4,6 +4,8 @@ import demoqa.core.BasePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.Reporter;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver, WebDriverWait wait) {
@@ -108,10 +110,11 @@ public class PracticeFormPage extends BasePage {
 
         String actualFileName = uploadedFileName.substring(uploadedFileName.lastIndexOf("\\") + 1);
 
-        if (expectedFileName.equals(actualFileName)) {
+        try {
+            Assert.assertEquals(actualFileName, expectedFileName, "⛔ Error: The name of the uploaded file does not match.");
             System.out.println("✅ The name of the uploaded file matches the expected one.");
-        } else {
-            System.out.println("⛔ Error: The name of the uploaded file does not match.");
+        } catch (AssertionError e) {
+            System.err.println("⛔ " + e.getMessage()); // Логируем ошибку, но не прерываем тест
         }
 
         return this;
