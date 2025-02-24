@@ -3,12 +3,7 @@ package demoqa.pages;
 import demoqa.core.BasePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import java.io.File;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver, WebDriverWait wait) {
@@ -95,16 +90,16 @@ public class PracticeFormPage extends BasePage {
     @FindBy(id = "uploadPicture")
     WebElement uploadPicture;
 
+
     public PracticeFormPage uploadPicture(String imgPath) {
         uploadPicture.sendKeys(imgPath);
         System.out.printf("✅ Image path: [%s]%n", imgPath);
 
-        String uploadedFileName = (String) ((JavascriptExecutor) driver)
-                .executeScript("return arguments[0].value;", uploadPicture);
+        String uploadedFileName = uploadPicture.getAttribute("value");
         System.out.printf("📂 Uploaded file: [%s]%n", uploadedFileName);
 
         if (uploadedFileName == null || uploadedFileName.isEmpty()) {
-            System.out.println("⛔ Error: The file did not load.!");
+            System.out.println("⛔ Error: The file did not load.");
         } else {
             System.out.println("✅ The file was uploaded successfully.");
         }
