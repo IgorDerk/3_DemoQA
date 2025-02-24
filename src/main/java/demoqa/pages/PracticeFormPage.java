@@ -3,8 +3,12 @@ package demoqa.pages;
 import demoqa.core.BasePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.io.File;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver, WebDriverWait wait) {
@@ -94,6 +98,27 @@ public class PracticeFormPage extends BasePage {
     public PracticeFormPage uploadPicture(String imgPath) {
         uploadPicture.sendKeys(imgPath);
         System.out.printf("✅ Image path: [%s]%n", imgPath);
+
+        String uploadedFileName = (String) ((JavascriptExecutor) driver)
+                .executeScript("return arguments[0].value;", uploadPicture);
+        System.out.printf("📂 Uploaded file: [%s]%n", uploadedFileName);
+
+        if (uploadedFileName == null || uploadedFileName.isEmpty()) {
+            System.out.println("⛔ Error: The file did not load.!");
+        } else {
+            System.out.println("✅ The file was uploaded successfully.");
+        }
+
+        String expectedFileName = imgPath.substring(imgPath.lastIndexOf("\\") + 1); // Получаем только имя файла
+
+        String actualFileName = uploadedFileName.substring(uploadedFileName.lastIndexOf("\\") + 1);
+
+        if (expectedFileName.equals(actualFileName)) {
+            System.out.println("✅ The name of the uploaded file matches the expected one.");
+        } else {
+            System.out.println("⛔ Error: The name of the uploaded file does not match.");
+        }
+
         return this;
     }
 }
