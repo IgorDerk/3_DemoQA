@@ -18,9 +18,9 @@ public class LoginTests extends TestBase {
     @Test
     public void loginPositiveTest(){
         new LoginPage(app.driver,app.wait)
-                .enterPersonalData("PORTISHEAD","Password@1")
+                .enterPersonalData("IgorDerk","Password@1")
                 .clickOnLoginButton()
-                .verifyUserName("PORTISHEAD")
+                .verifyUserName("IgorDerk")
         ;
     }
 }

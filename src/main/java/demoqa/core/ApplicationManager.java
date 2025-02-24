@@ -40,6 +40,7 @@ public class ApplicationManager {
         driver.manage().window().setPosition(new Point(-1500, 0));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // неявное
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://demoqa.com/");
         basePage = new BasePage(driver,wait);
