@@ -114,6 +114,32 @@ public class BasePage {
         }
     }
 
+    protected void shouldHaveTextInValue(WebElement element, String text, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
+        try {
+            boolean isTextPresent = wait.until(ExpectedConditions.attributeContains(element, "value", text));
+            Assert.assertTrue(isTextPresent, "Expected text: [" + text + "], actual text in element: [" + element.getAttribute("value") + "] in element: [" + element + "]");
+        } catch (TimeoutException e) {
+            throw new AssertionError("Text not found in element: [" + element + "], expected text: [" + text + "] was text:[" + element.getAttribute("value") + "]", e);
+        }
+    }
+
+    protected void shouldHaveText2(WebElement element, String text, int timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
+        try {
+            boolean isTextPresent = wait.until( driver ->{
+                String actualText = element.getText();
+                if (actualText.isEmpty() && element.getTagName().equalsIgnoreCase("input")){
+                    actualText = element.getAttribute("value");
+                }
+                return  actualText.contains(text);
+                    });
+            Assert.assertTrue(isTextPresent, "Expected text: [" + text + "], actual text in element: [" + element.getText() + "] in element: [" + element + "]");
+        } catch (TimeoutException e) {
+            throw new AssertionError("Text not found in element: [" + element + "], expected text: [" + text + "] was text:[" + element.getText() + "]", e);
+        }
+    }
+
     public void pause(int millis){
         try {
             Thread.sleep(millis);

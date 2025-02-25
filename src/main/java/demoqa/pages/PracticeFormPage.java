@@ -3,9 +3,12 @@ package demoqa.pages;
 import demoqa.core.BasePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
+
+import static java.util.Objects.isNull;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver, WebDriverWait wait) {
@@ -93,32 +96,13 @@ public class PracticeFormPage extends BasePage {
     WebElement uploadPicture;
 
 
-    public PracticeFormPage uploadPicture(String imgPath) {
+    public PracticeFormPage uploadPicture(String imgPath, String imgName) {
         uploadPicture.sendKeys(imgPath);
+        shouldHaveText2(uploadPicture, imgName, 1000);
         System.out.printf("✅ Image path: [%s]%n", imgPath);
-
-        String uploadedFileName = uploadPicture.getAttribute("value");
-        System.out.printf("📂 Uploaded file: [%s]%n", uploadedFileName);
-
-        if (uploadedFileName == null || uploadedFileName.isEmpty()) {
-            System.out.println("⛔ Error: The file did not load.");
-        } else {
-            System.out.println("✅ The file was uploaded successfully.");
-        }
-
-        String expectedFileName = imgPath.substring(imgPath.lastIndexOf("\\") + 1); // Получаем только имя файла
-
-        String actualFileName = uploadedFileName.substring(uploadedFileName.lastIndexOf("\\") + 1);
-
-        try {
-            Assert.assertEquals(actualFileName, expectedFileName, "⛔ Error: The name of the uploaded file does not match.");
-            System.out.println("✅ The name of the uploaded file matches the expected one.");
-        } catch (AssertionError e) {
-            System.err.println("⛔ " + e.getMessage()); // Логируем ошибку, но не прерываем тест
-        }
-
         return this;
     }
+
     @FindBy(id = "currentAddress")
     WebElement currentAddress;
 
@@ -171,6 +155,44 @@ public class PracticeFormPage extends BasePage {
     public PracticeFormPage verifySuccessRegistration(String textToCheck) {
         shouldHaveText(registrationModal, textToCheck, 5000);
         System.out.printf("✅ Registration success: [%s]%n", textToCheck);
+        return this;
+    }
+
+    @FindBy(xpath = "//select[@class='react-datepicker__month-select']")
+    WebElement monthDropdown;
+    @FindBy(xpath = "//select[@class='react-datepicker__year-select']")
+    WebElement yearDropdown;
+
+    public PracticeFormPage chooseDate(String day, String month, String year) {
+        //if(day == null || day.isBlank() || month == null || month.isBlank() || year == null || year.isBlank()){
+        if (isNull(day) || isNull(month) || isNull(year) || month.isBlank() || year.isBlank() || day.isBlank()) {
+            throw new IllegalArgumentException("❌ Date parameter is null or empty");
+        }
+
+        if (!day.matches("^(0?[1-9]|[12][0-9]|3[01])$")) {
+            throw new IllegalArgumentException("❌ Day must be a valid number between 1 and 31");
+        }
+
+        if (!month.matches("^(January|February|March|April|May|June|July|August|September|October|November|December)$")) {
+            throw new IllegalArgumentException("❌ Month must be a valid month name");
+        }
+
+        day = day.replaceFirst("^0", ""); //! убираем в числе "04" перый "0" чтоб селениум распознал число 4 и подставил его в локатор
+
+        click(dateOfBirthInput);
+
+        Select selectMonth = new Select(monthDropdown);
+        selectMonth.selectByVisibleText(month);
+        Select selectYear = new Select(yearDropdown);
+        selectYear.selectByVisibleText(year);
+
+        //By dateLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and text()='"+ day +"' and contains(@aria-label, '"+month+" "+day+"th, "+year+"')]");
+        By dateLocator = By.xpath("//div[contains(@aria-label, '" + month + "') and contains(@aria-label, '" + year + "') and text()='" + day + "']");
+        WebElement element = driver.findElement(dateLocator);
+        click(element);
+
+        day = "0" + day;
+        System.out.printf("✅ Date: [%s], [%s], [%s]%n", day, month, year);
         return this;
     }
 }
