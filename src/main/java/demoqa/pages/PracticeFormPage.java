@@ -119,4 +119,58 @@ public class PracticeFormPage extends BasePage {
 
         return this;
     }
+    @FindBy(id = "currentAddress")
+    WebElement currentAddress;
+
+    public PracticeFormPage enterCurrentAddress(String address) {
+        type(currentAddress, address);
+        System.out.printf("✅ Address: [%s]%n", address);
+        return this;
+    }
+
+    @FindBy(id = "state")
+    WebElement stateContainer;
+
+    @FindBy(id = "react-select-3-input")
+    WebElement stateInput;
+
+    public PracticeFormPage enterState(String state) {
+        // type(stateContainer, state);
+        click(stateContainer);
+        stateInput.sendKeys(state);
+        stateInput.sendKeys(Keys.ENTER);
+        System.out.printf("✅ Address state: [%s]%n", state);
+        return this;
+    }
+
+    @FindBy(id = "city")
+    WebElement cityContainer;
+
+    @FindBy(id = "react-select-4-input")
+    WebElement cityInput;
+
+    public PracticeFormPage enterCity(String city) {
+        click(cityContainer);
+        cityInput.sendKeys(city);
+        cityInput.sendKeys(Keys.ENTER);
+        System.out.printf("✅ Address city: [%s]%n", city);
+        return this;
+    }
+
+    @FindBy(id = "submit")
+    WebElement submitButton;
+
+    public PracticeFormPage submitForm() {
+        click(submitButton);
+        return this;
+    }
+
+    @FindBy(id = "example-modal-sizes-title-lg")
+    WebElement registrationModal;
+
+    public PracticeFormPage verifySuccessRegistration(String textToCheck) {
+        shouldHaveText(registrationModal, textToCheck, 5000);
+        System.out.printf("✅ Registration success: [%s]%n", textToCheck);
+        return this;
+    }
 }

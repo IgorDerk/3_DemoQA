@@ -5,6 +5,7 @@ import demoqa.pages.HomePage;
 import demoqa.pages.PracticeFormPage;
 import demoqa.pages.SidePanel;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 public class PracticeFormTest extends TestBase {
@@ -15,19 +16,37 @@ public class PracticeFormTest extends TestBase {
     }
 
     @Test
-    public void practiceFormPositiveTest(){
-        new PracticeFormPage(app.driver,app.wait)
-                .enterPersonalData("Marklin","Müller","derk.i26252@gmail.com","1234567890")
+    public void practiceFormPositiveTest() {
+        new PracticeFormPage(app.driver, app.wait)
+                .enterPersonalData("Marklin", "Müller", "derk.i26252@gmail.com", "1234567890")
                 .selectGender("Female")
                 .chooseDateAsString("04 May 1965")
-                .enterSubjects(new String[]{"Maths","English"})
-                .chooseHobbies(new String[]{"Sports","Music"})
+                .enterSubjects(new String[]{"Maths", "English"})
+                .chooseHobbies(new String[]{"Sports", "Music"})
                 .uploadPicture("C:\\Users\\derki\\OneDrive\\Pictures\\Image20250221114742.png")
-//                .enterCurrentAddress("Rostock Deutschland")
-//                .enterState("GR")
-//                .enterCity("Rostock")
-//                .submitForm()
-//                .verifySuccessRegistration("Thanks for submitting the form")
+                .enterCurrentAddress("Rostock Deutschland")
+                .enterState("NCR")
+                .enterCity("Delhi")
+                .submitForm()
+                .verifySuccessRegistration("Thanks for submitting the form")
+        ;
+    }
+
+    @Test
+    @Parameters({"firstName", "lastName", "email", "phone"})
+    public void practiceFormParameterPositiveTest(String firstName, String lastName, String email, String phone) {
+        new PracticeFormPage(app.driver, app.wait)
+                .enterPersonalData(firstName, lastName, System.currentTimeMillis() + email, phone)
+                .selectGender("Female")
+                .chooseDateAsString("04 May 1965")
+                .enterSubjects(new String[]{"Maths", "English"})
+                .chooseHobbies(new String[]{"Sports", "Music"})
+                .uploadPicture("C:\\Users\\derki\\OneDrive\\Pictures\\Image20250221114742.png")
+                .enterCurrentAddress("Rostock Deutschland")
+                .enterState("NCR")
+                .enterCity("Delhi")
+                .submitForm()
+                .verifySuccessRegistration("Thanks for submitting the form")
         ;
     }
 }
